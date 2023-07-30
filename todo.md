@@ -1,20 +1,19 @@
-[v-0.0.1]
-[T+3.6]
+[v-0.0.2]
+[T+4.865]
 
 ## Completed
-    - architecture
-        - governing function
-            - ~~matrix coefficients~~
-        - ~~vectors~~
-    - ~~Fill out the TODO list~~
+    - ~~architecture~~
+        - ~~integration~~
+        - ~~governing function~~
+            - ~~implimentation~~
 
 ## Pending
-    - architecture
-        - governing function
-            - implimentation
+    - Debugging
+        - print state to file
+        - print matricies to file
+
 # TODO
     - architecture
-        - integration
     - training
         - optomizer
             - monte carlo

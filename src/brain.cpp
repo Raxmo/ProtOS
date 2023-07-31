@@ -1,4 +1,187 @@
 #include <brain.h>
+Brain Brain::study(double** indat, double** outdat, int numbentry)
+{
+    std::cout << "setting up perams...\n";
+
+    double plasticity = 0.99;
+    double decay = 0.001;
+    int params =
+        numbcomp +
+        numbout +
+        3 * numbin * numbcomp +
+        3 * numbcomp * numbcomp +
+        3 * numbin * numbout +
+        3 * numbcomp * numbout
+    ;
+
+    std::cout << "Setting up random number generator\n";
+
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<>  rng(0, params - 1);
+    std::uniform_real_distribution<> z1(0.0, 1.0);
+    std::uniform_int_distribution<>  ent(0, numbentry - 1);
+
+    /* Monte carlo optomizer
+     * 1) test with current state
+     * 2) make a random change
+     * 3) test again with new state
+     * 4) if new is better, keep it with probability plasticity
+     * 5) if old is better, keep it with probability plasticity
+     * 6) decay plasticity by decay rate
+     * 7) go to step 1 if plasticity > 0.01
+     */
+
+    std::cout << "Starting core loop\n";
+
+    for(;plasticity > 0.01; plasticity *= 1.0 - decay)
+    {
+
+        int entry = ent(mt);
+
+        // set input to the test data
+
+        for(int r = 0; r < numbin; r++)
+        {
+            input[r] = indat[entry][r];
+        }
+
+        step();
+        double olddist = 0.0;
+        for(int r = 0; r < numbout; r++)
+        {
+            olddist += (output[r] - outdat[entry][r]) * (output[r] - outdat[entry][r]);
+        }
+
+        //----------------------------------------------------------------------------//
+
+        int i = rng(mt);
+
+        double* target = nullptr;
+        double oldval = 0.0;
+
+        //---------------------------------------------------------------------------//
+
+        if(i < numbcomp && target == nullptr)
+        {
+            oldval = xtcb[i];
+            target = &xtcb[i];
+        }
+        else
+        {
+            i -= numbcomp;
+        }
+
+        if(i < numbout && target == nullptr)
+        {
+            oldval = xtob[i];
+            target = &xtob[i];
+        }
+        else
+        {
+            i -= numbout;
+        }
+
+        if(i < 3 * numbin * numbcomp && target == nullptr)
+        {
+            int c = i % numbin;
+            int r = (i / numbin) % numbcomp;
+            int d = i / (numbin * numbcomp);
+
+            oldval = itcs[d][r][c];
+            target = &itcs[d][r][c];
+        }
+        else
+        {
+            i -= 3 * numbin * numbcomp;
+        }
+
+        if(i < 3 * numbcomp * numbcomp && target == nullptr)
+        {
+            int c = i % numbcomp;
+            int r = (i / numbcomp) % numbcomp;
+            int d = i / (numbcomp * numbcomp);
+
+            oldval = ctcs[d][r][c];
+            target = &ctcs[d][r][c];
+        }
+        else
+        {
+            i -= 3 * numbcomp * numbcomp;
+        }
+
+        if(i < 3 * numbin * numbout && target == nullptr)
+        {
+            int c = i % numbin;
+            int r = (i / numbin) % numbout;
+            int d = i / (numbin * numbout);
+
+            oldval = itos[d][r][c];
+            target = &itos[d][r][c];
+        }
+        else
+        {
+            i -= 3 * numbin * numbout;
+        }
+
+        if(i < 3 * numbcomp * numbout && target == nullptr)
+        {
+            int c = i % numbcomp;
+            int r = (i / numbcomp) % numbout;
+            int d = i / (numbcomp * numbout);
+
+            oldval = ctos[d][r][c];
+            target = &ctos[d][r][c];
+        }
+        else
+        {
+            i -= 3 * numbcomp * numbout;
+        }
+
+        //----------------------------------------------------------------------------------//
+
+        double choice = z1(mt);
+        double mult = choice < 1.0 / 3.0 ? -1.0 : choice < 2.0 / 3.0 ? 1.01 : 1.0 / 1.01;
+
+        *target *= mult;
+
+        //----------------------------------------------------------------------------------//
+
+        step();
+        double newdist = 0.0;
+        for(int r = 0; r < numbout; r++)
+        {
+            newdist += (output[r] - outdat[entry][r]) * (output[r] - outdat[entry][r]);
+        }
+
+        //----------------------------------------------------------------------------------//
+
+        if(newdist < olddist)
+        {
+            if(z1(mt) < plasticity)
+            {
+                *target = *target;
+            }
+            else
+            {
+                *target = oldval;
+            }
+        }
+        else
+        {
+            if(z1(mt) < plasticity)
+            {
+                *target = oldval;
+            }
+            else
+            {
+                *target = *target;
+            }
+        }
+    }
+
+    return *this;
+}
 Brain Brain::step()
 {
     for(double t = 0.0; t < tick; t += dt)

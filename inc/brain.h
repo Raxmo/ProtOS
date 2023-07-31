@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <algorithm>
+#include <cmath>
 
 class Brain
 {
@@ -47,4 +48,5 @@ public:
     Brain setinput(int r, double v);
     Brain readoutput();
     Brain step();
+    Brain study(double** indat, double** outdat, int numbentry);
 };

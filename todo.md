@@ -1,21 +1,21 @@
-[v-0.0.8]
-[T+11.246]
+[v-0.0.9]
+[T+14.669]
 
 ## Completed
-- ~~architecture~~
-    - ~~step method~~
+- ~~training~~
+    - ~~optomizer~~
+        - ~~monte carlo~~
 
 ## Pending
+- debugging
+    - fix nans
+    - fix positive 3rd order matricies
 
 # TODO
-
+- training
+    - input / outut declared in file to be read by AI for training
 - architecture
     - run method
-- training
-    - optomizer
-        - monte carlo
-    - dataset
-        - function call
 - testing
     - sweeping output method
         - sweep through 0-1 on both inputs

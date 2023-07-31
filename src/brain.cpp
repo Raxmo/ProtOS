@@ -11,11 +11,11 @@ Brain Brain::printstats()
 Brain Brain::logstats()
 {
     {std::fstream ofile;
-        {ofile.open("stats.md", std::ios::out | std::ios::trunc);
+        {ofile.open("Stats.md", std::ios::out | std::ios::trunc);
 
             std::stringstream buff;
 
-            buff << "Brain Stats:\n";
+            buff << "# Brain Stats:\n";
             buff << "| Inputs | Computes | Outputs |\n";
             buff << "|:------:|:--------:|:-------:|\n";
             buff << "| " << numbin << " | " << numbcomp << " | " << numbout << " |";
@@ -33,7 +33,7 @@ Brain Brain::logstate()
     {std::fstream ofile;
         {ofile.open("State.md", std::ios::out | std::ios::trunc);
 
-            ofile << "Brain State:\n";
+            ofile << "# Brain State:\n";
             ofile << "| Input | Compute | Output |\n";
             ofile << "|:-----:|:-------:|:------:|\n";
 
@@ -53,10 +53,149 @@ Brain Brain::logstate()
 
 Brain Brain::logmats()
 {
-    {std::ftream ofile;
+    {std::fstream ofile;
         {ofile.open("Mats.md", std::ios::out | std::ios::trunc);
 
-            ofile << "Brain Matricies:\n";
+            ofile << "# Brain Matricies:\n";
+            ofile << "-----\n";
+
+            //------------------------------------------------------------------------------------------------------------//
+
+            ofile << "## Bias Vectors:\n";
+            ofile << "| Compute | Output |\n";
+            ofile << "|:-------:|:------:|\n";
+            for (int r = 0; r < std::max(numbcomp, numbout); r++)
+            {
+                ofile << "| ";
+                ofile << (r < numbcomp ? std::to_string(xtcb[r]) : " ") << " | ";
+                ofile << (r < numbout ? std::to_string(xtob[r]) : " ") << " |\n";
+            }
+            ofile << "\n";
+            ofile << "-----\n";
+
+            //---------------------------------------------------------------------------------------------------------//
+
+            for(int d = 0; d < 3; d++)
+            {
+                ofile << "## Input to Compute Matrix " << d + 1 << ":\n";
+                ofile << "|";
+                for(int c = 0; c < numbin; c++)
+                {
+                    ofile << " |";
+                }
+                ofile << "\n";
+                ofile << "|";
+                for(int c = 0; c < numbin; c++)
+                {
+                    ofile << ":---:|";
+                }
+                ofile << "\n";
+                for(int r = 0; r < numbcomp; r++)
+                {
+                    ofile << "|";
+                    for(int c = 0; c < numbin; c++)
+                    {
+                        ofile << itcs[d][r][c] << " |";
+                    }
+                    ofile << "\n";
+                }
+                ofile << "\n";
+            }
+            ofile << "\n";
+            ofile << "-----\n";
+
+            //--------------------------------------------------------------------------------------------------------------//
+
+            for(int d = 0; d < 3; d++)
+            {
+                ofile << "## Compute to Compute Matrix " << d + 1 << ":\n";
+                ofile << "|";
+                for(int c = 0; c < numbcomp; c++)
+                {
+                    ofile << " |";
+                }
+                ofile << "\n";
+                ofile << "|";
+                for (int c = 0; c < numbcomp; c++)
+                {
+                    ofile << ":---:|";
+                }
+                ofile << "\n";
+                for(int r = 0; r < numbcomp; r++)
+                {
+                    ofile << "|";
+                    for(int c = 0; c < numbcomp; c++)
+                    {
+                        ofile << ctcs[d][r][c] << " |";
+                    }
+                    ofile << "\n";
+                }
+                ofile << "\n";
+            }
+            ofile << "\n";
+            ofile << "-----\n";
+
+            //-----------------------------------------------------------------------------------------------------------------//
+
+            for(int d = 0; d < 3; d++)
+            {
+                ofile << "## Input to Output Matrix " << d + 1 << ":\n";
+                ofile << "|";
+                for(int c = 0; c < numbin; c++)
+                {
+                    ofile << " |";
+                }
+                ofile << "\n";
+                ofile << "|";
+                for (int c = 0; c < numbin; c++)
+                {
+                    ofile << ":-----:|";
+                }
+                ofile << "\n";
+                for(int r = 0; r < numbout; r++)
+                {
+                    ofile << "|";
+                    for(int c = 0; c < numbin; c++)
+                    {
+                        ofile << itos[d][r][c] << " |";
+                    }
+                    ofile << "\n";
+                }
+                ofile << "\n";
+            }
+            ofile << "\n";
+            ofile << "-----\n";
+
+            //---------------------------------------------------------------------------------------------------------------//
+
+            for(int d = 0; d < 3; d++)
+            {
+                ofile << "## Compute to Output Matrix " << d + 1 << ":\n";
+                ofile << "|";
+                for(int c = 0; c < numbcomp; c++)
+                {
+                    ofile << " |";
+                }
+                ofile << "\n";
+                ofile << "|";
+                for(int c = 0; c < numbcomp; c++)
+                {
+                    ofile << ":-----:|";
+                }
+                ofile << "\n";
+                for(int r = 0; r < numbout; r++)
+                {
+                    ofile << "|";
+                    for(int c = 0; c < numbcomp; c++)
+                    {
+                        ofile << ctos[d][r][c] << " |";
+                    }
+                    ofile << "\n";
+                }
+                ofile << "\n";
+            }
+            ofile << "\n";
+            ofile << "-----\n";
 
         ofile.close();}
     }
@@ -79,7 +218,7 @@ void Brain::governer() // third order polynomial
 
     for(int r = 0; r < numbcomp; r++)
     {
-        cv[r] = itcb[r] + ctcb[r];
+        cv[r] = xtcb[r];
 
         for(int c = 0; c < numbin; c++)
         {
@@ -100,7 +239,7 @@ void Brain::governer() // third order polynomial
     }
     for(int r = 0; r < numbout; r++)
     {
-        ov[r] = itob[r] + ctob[r];
+        ov[r] = xtob[r];
 
         for(int c = 0; c < numbin; c++)
         {
@@ -140,7 +279,7 @@ Brain::Brain(int nin, int ncomp, int nout)
     // RNG set-up
     std::random_device rd;
     std::mt19937 e2(rd());
-    std::uniform_real_distribution<> dist(0, 1);
+    std::uniform_real_distribution<> dist(-1, 1);
 
     // Polynomial co-efficients set-up
     for (int p = 0; p < 3; p++)
@@ -177,25 +316,21 @@ Brain::Brain(int nin, int ncomp, int nout)
             }
             for(int c = 0; c < ncomp; c++)
             {
-                ctcs[p][r][c] = p == 2 ? dist(e2) / 2.0 - 0.5 : dist(e2);
+                ctos[p][r][c] = p == 2 ? dist(e2) / 2.0 - 0.5 : dist(e2);
             }
         }
     }
 
     // Hieghest order co-efficients are negative in order to maintain global attractor & the 0th order co-efficients
-    itcb = new double[ncomp];
-    ctcb = new double[ncomp];
+    xtcb = new double[ncomp];
     for(int v = 0; v < ncomp; v++)
     {
-        itcb[v] = dist(e2);
-        ctcb[v] = dist(e2);
+        xtcb[v] = dist(e2);
     }
 
-    itob = new double[nout];
-    ctob = new double[nout];
+    xtob = new double[nout];
     for(int v = 0; v < nout; v++)
     {
-        itob[v] = dist(e2);
-        ctob[v] = dist(e2);
+        xtob[v] = dist(e2);
     }
 };

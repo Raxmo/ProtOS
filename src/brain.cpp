@@ -30,14 +30,36 @@ Brain Brain::logstats()
 
 Brain Brain::logstate()
 {
+    {std::fstream ofile;
+        {ofile.open("State.md", std::ios::out | std::ios::trunc);
 
+            ofile << "Brain State:\n";
+            ofile << "| Input | Compute | Output |\n";
+            ofile << "|:-----:|:-------:|:------:|\n";
+
+            for(int r = 0; r < std::max(std::max(numbin, numbcomp), numbout); r++)
+            {
+                ofile <<  "| " << (r < numbin   ? std::to_string(input[r])   : "---");
+                ofile << " | " << (r < numbcomp ? std::to_string(compute[r]) : "---");
+                ofile << " | " << (r < numbout  ? std::to_string(output[r])  : "---");
+                ofile << " |\n";
+            }
+
+        ofile.close();}
+    }
 
     return *this;
 }
 
 Brain Brain::logmats()
 {
+    {std::ftream ofile;
+        {ofile.open("Mats.md", std::ios::out | std::ios::trunc);
 
+            ofile << "Brain Matricies:\n";
+
+        ofile.close();}
+    }
 
     return *this;
 }

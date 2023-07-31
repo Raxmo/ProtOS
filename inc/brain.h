@@ -46,4 +46,5 @@ public:
     Brain readmats();
     Brain setinput(int r, double v);
     Brain readoutput();
+    Brain step();
 };

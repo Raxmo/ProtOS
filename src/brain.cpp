@@ -1,4 +1,14 @@
 #include <brain.h>
+Brain Brain::step()
+{
+    for(double t = 0.0; t < tick; t += dt)
+    {
+        governer();
+    }
+
+    return *this;
+}
+
 Brain Brain::setinput(int r, double v)
 {
     input[r] = v;

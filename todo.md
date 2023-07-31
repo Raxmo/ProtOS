@@ -1,24 +1,16 @@
-[v-0.0.7]
-[T+11.068]
+[v-0.0.8]
+[T+11.246]
 
 ## Completed
-
-- ~~testing~~
-    - ~~set input method~~
-    - ~~read output method~~
-- ~~architechture~~
-    - ~~save state to file~~
-    - ~~read state from file~~
-    - ~~save matricies to file~~
-    - ~~read matricies from file~~
+- ~~architecture~~
+    - ~~step method~~
 
 ## Pending
-
-- architecture
 
 # TODO
 
 - architecture
+    - run method
 - training
     - optomizer
         - monte carlo

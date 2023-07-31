@@ -4,8 +4,8 @@ int main()
     Brain test(2, 3, 1);
 
     test
-        .savemats()
-        .savestate()
+        .readstate()
+        .readmats()
         .logstats()
         .logstate()
         .logmats()

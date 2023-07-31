@@ -42,4 +42,8 @@ public:
     Brain logmats();
     Brain savestate();
     Brain savemats();
+    Brain readstate();
+    Brain readmats();
+    Brain setinput(int r, double v);
+    Brain readoutput();
 };

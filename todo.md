@@ -1,19 +1,35 @@
-[v-0.0.6]
-[T+9.146]
+[v-0.0.7]
+[T+11.068]
 
 ## Completed
-    - ~~mostly just reserach~~
+
+- ~~testing~~
+    - ~~set input method~~
+    - ~~read output method~~
+- ~~architechture~~
+    - ~~save state to file~~
+    - ~~read state from file~~
+    - ~~save matricies to file~~
+    - ~~read matricies from file~~
+
 ## Pending
-    - architecture
-        - save state and matricies to file
-        - read state and matricies from file
+
+- architecture
 
 # TODO
-    - training
-        - optomizer
-            - monte carlo
-        - dataset
-            - function call
-    - testing
-    - debugging
-        - allow for additional messages in console for the logging methods
+
+- architecture
+- training
+    - optomizer
+        - monte carlo
+    - dataset
+        - function call
+- testing
+    - sweeping output method
+        - sweep through 0-1 on both inputs
+        - output to a gray-scale image
+- debugging
+    - allow for additional messages in console for the logging methods
+- Optomizing
+    - convert to contiguous memory tensors
+    - update methods to use contiguous memory

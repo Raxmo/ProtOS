@@ -1,4 +1,118 @@
 #include <brain.h>
+Brain Brain::setinput(int r, double v)
+{
+    input[r] = v;
+
+    return *this;
+}
+Brain Brain::readoutput()
+{
+    std::cout << "Output state:\n";
+    for(int r = 0; r < numbout; r++)
+    {
+        std::cout << "[" << r << "]-> " << output[r] << "\n";
+    }
+
+    return *this;
+}
+Brain Brain::savestate()
+{
+    std::ofstream ofile("data/state.dat", std::ios::binary);
+    if(!ofile){std::cout << "Failed to save state!\n"; return *this;}
+
+    for(int r = 0; r < numbcomp; r++)
+    {
+        ofile.write(reinterpret_cast<char *>(&compute[r]), sizeof(compute[r]));
+    }
+
+    ofile.close();
+
+    return *this;
+}
+Brain Brain::savemats()
+{
+    std::ofstream ofile("data/mats.dat", std::ios::binary);
+    if(!ofile){std::cout << "Failed to save matricies!\n"; return *this;}
+
+    for(int d = 0; d < 3; d++)
+    {
+        for(int r = 0; r < numbcomp; r++)
+        {
+            for(int c = 0; c < numbin; c++)
+            {
+                ofile.write(reinterpret_cast<char *>(&itcs[d][r][c]), sizeof(itcs[d][r][c]));
+            }
+
+            for(int c = 0; c < numbcomp; c++)
+            {
+                ofile.write(reinterpret_cast<char *>(&ctcs[d][r][c]), sizeof(ctcs[d][r][c]));
+            }
+        }
+        for(int r = 0; r < numbout; r++)
+        {
+            for(int c = 0; c < numbin; c++)
+            {
+                ofile.write(reinterpret_cast<char *>(&itos[d][r][c]), sizeof(itos[d][r][c]));
+            }
+            for(int c = 0; c < numbcomp; c++)
+            {
+                ofile.write(reinterpret_cast<char *>(&ctos[d][r][c]), sizeof(ctos[d][r][c]));
+            }
+        }
+    }
+
+    ofile.close();
+
+    return *this;
+}
+Brain Brain::readstate()
+{
+    std::ifstream ifile("data/state.dat", std::ios::binary);
+    if(!ifile){std::cout << "Failed to open state!\n"; return *this;}
+
+    for(int r = 0; r < numbcomp; r++)
+    {
+        ifile.read(reinterpret_cast<char *>(&compute[r]), sizeof(compute[r]));
+    }
+
+    ifile.close();
+
+    return *this;
+}
+Brain Brain::readmats()
+{
+    std::ifstream ifile("data/mats.dat", std::ios::binary);
+    if(!ifile){std::cout << "failed to read matricies!\n"; return *this;}
+
+    for(int d = 0; d < 3; d++)
+    {
+        for(int r = 0; r < numbcomp; r++)
+        {
+            for(int c = 0; c < numbin; c++)
+            {
+                ifile.read(reinterpret_cast<char *>(&itcs[d][r][c]), sizeof(itcs[d][r][c]));
+            }
+
+            for(int c = 0; c < numbcomp; c++)
+            {
+                ifile.read(reinterpret_cast<char *>(&ctcs[d][r][c]), sizeof(ctcs[d][r][c]));
+            }
+        }
+        for(int r = 0; r < numbout; r++)
+        {
+            for(int c = 0; c < numbin; c++)
+            {
+                ifile.read(reinterpret_cast<char *>(&itos[d][r][c]), sizeof(itos[d][r][c]));
+            }
+            for(int c = 0; c < numbcomp; c++)
+            {
+                ifile.read(reinterpret_cast<char *>(&ctos[d][r][c]), sizeof(ctos[d][r][c]));
+            }
+        }
+    }
+
+    return *this;
+}
 Brain Brain::printstats()
 {
     std::cout << "[INPUTS]--> " << numbin << "\n";

@@ -40,4 +40,6 @@ public:
     Brain logstats();
     Brain logstate();
     Brain logmats();
+    Brain savestate();
+    Brain savemats();
 };

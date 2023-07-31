@@ -11,7 +11,7 @@ Brain Brain::printstats()
 Brain Brain::logstats()
 {
     {std::fstream ofile;
-        {ofile.open("Stats.md", std::ios::out | std::ios::trunc);
+        {ofile.open("logs/Stats.md", std::ios::out | std::ios::trunc);
 
             std::stringstream buff;
 
@@ -31,7 +31,7 @@ Brain Brain::logstats()
 Brain Brain::logstate()
 {
     {std::fstream ofile;
-        {ofile.open("State.md", std::ios::out | std::ios::trunc);
+        {ofile.open("logs/State.md", std::ios::out | std::ios::trunc);
 
             ofile << "# Brain State:\n";
             ofile << "| Input | Compute | Output |\n";
@@ -54,7 +54,7 @@ Brain Brain::logstate()
 Brain Brain::logmats()
 {
     {std::fstream ofile;
-        {ofile.open("Mats.md", std::ios::out | std::ios::trunc);
+        {ofile.open("logs/Mats.md", std::ios::out | std::ios::trunc);
 
             ofile << "# Brain Matricies:\n";
             ofile << "-----\n";

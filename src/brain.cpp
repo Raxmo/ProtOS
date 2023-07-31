@@ -1,4 +1,47 @@
 #include <brain.h>
+Brain Brain::printstats()
+{
+    std::cout << "[INPUTS]--> " << numbin << "\n";
+    std::cout << "[COMPUTE]-> " << numbcomp << "\n";
+    std::cout << "[OUTPUT]--> " << numbout << "\n";
+
+    return *this;
+}
+
+Brain Brain::logstats()
+{
+    {std::fstream ofile;
+        {ofile.open("stats.md", std::ios::out | std::ios::trunc);
+
+            std::stringstream buff;
+
+            buff << "Brain Stats:\n";
+            buff << "| Inputs | Computes | Outputs |\n";
+            buff << "|:------:|:--------:|:-------:|\n";
+            buff << "| " << numbin << " | " << numbcomp << " | " << numbout << " |";
+
+            ofile << buff.str();
+
+        ofile.close();}
+    }
+
+    return *this;
+}
+
+Brain Brain::logstate()
+{
+
+
+    return *this;
+}
+
+Brain Brain::logmats()
+{
+
+
+    return *this;
+}
+
 void Brain::test()
 {
     std::cout << "Hello Test Brain!" << std::endl;
@@ -18,15 +61,15 @@ void Brain::governer() // third order polynomial
 
         for(int c = 0; c < numbin; c++)
         {
-            cv[r] += itc[0][r][c] * input[c];
-            cv[r] += itc[1][r][c] * input[c] * input[c];
-            cv[r] += itc[2][r][c] * input[c] * input[c] * input[c];
+            cv[r] += itcs[0][r][c] * input[c];
+            cv[r] += itcs[1][r][c] * input[c] * input[c];
+            cv[r] += itcs[2][r][c] * input[c] * input[c] * input[c];
         }
         for(int c = 0; c < numbcomp; c++)
         {
-            cv[r] += ctc[0][r][c] * compute[c];
-            cv[r] += ctc[1][r][c] * compute[c] * compute[c];
-            cv[r] += ctc[2][r][c] * compute[c] * compute[c] * compute[c];
+            cv[r] += ctcs[0][r][c] * compute[c];
+            cv[r] += ctcs[1][r][c] * compute[c] * compute[c];
+            cv[r] += ctcs[2][r][c] * compute[c] * compute[c] * compute[c];
         }
 
         cv[r] *= dt;
@@ -39,15 +82,15 @@ void Brain::governer() // third order polynomial
 
         for(int c = 0; c < numbin; c++)
         {
-            ov[r] += ito[0][r][c] * input[c];
-            ov[r] += ito[1][r][c] * input[c] * input[c];
-            ov[r] += ito[2][r][c] * input[c] * input[c] * input[c];
+            ov[r] += itos[0][r][c] * input[c];
+            ov[r] += itos[1][r][c] * input[c] * input[c];
+            ov[r] += itos[2][r][c] * input[c] * input[c] * input[c];
         }
         for(int c = 0; c < numbcomp; c++)
         {
-            ov[r] += cto[0][r][c] * comute[c];
-            ov[r] += cto[1][r][c] * compute[c] * compute[c];
-            ov[r] += cto[2][r][c] * compute[c] * compute[c] * compute[c];
+            ov[r] += ctos[0][r][c] * compute[c];
+            ov[r] += ctos[1][r][c] * compute[c] * compute[c];
+            ov[r] += ctos[2][r][c] * compute[c] * compute[c] * compute[c];
         }
 
         ov[r] *= dt;

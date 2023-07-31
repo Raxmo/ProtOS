@@ -3,6 +3,9 @@
 #include <random>
 #include <chrono>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
 class Brain
 {
 private:
@@ -33,4 +36,8 @@ public:
     Brain(int nin, int ncomp, int nout);
     ~Brain();
     void test();
+    Brain printstats();
+    Brain logstats();
+    Brain logstate();
+    Brain logmats();
 };
